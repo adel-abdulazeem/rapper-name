@@ -11,7 +11,7 @@ const rappers = {
         'birthName':'Sheyaa Bin Abraham-Joseph',
         'birthLocation': 'London, England'
     },
-    'chance rhe rapper': {
+    'chance the rapper': {
         'age': 28,
         'birthName':'Chancelor Bennett',
         'birthLocation': 'Chicago, Illinois'
