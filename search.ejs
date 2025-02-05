@@ -117,7 +117,7 @@
             <strong>تم العثور على ${data.count} نتيجة:</strong>
             ${data.matches.map(match => `
                 <div class="match">
-                    <div>الرقم: ${match.number + 1}</div>
+                    <div>الرقم: ${Number(match.number) + Number(1)}</div>
                     <div>الاسم: ${match.originalName}</div>
                 </div>
             `).join('')}

@@ -113,20 +113,21 @@ app.post('/search-name', upload.single('pdf'), async (req, res) => {
     }
 });
 
-// Run every day at 8 AM
-cron.schedule("22 15 * * *", async () => {
-    console.log("Checking subscriptions...");
+cron.schedule('*/1 * * * *', async () => {
     try {
-      await checkSubscriptions();
+      const response = await fetch('https://ucl-year-winner.onrender.com', {
+        method: 'GET',
+      });
+      console.log('Response:');
     } catch (error) {
-      console.error("Error in scheduled task:", error);
+      console.error('Error:', error);
     }
   });
 
   cron.schedule('*/5 * * * *', async () => {
     try {
       const response = await fetch('https://ucl-year-winner.onrender.com', {
-        method: 'POST',
+        method: 'GET',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ key: 'value' })
       });
