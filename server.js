@@ -28,14 +28,12 @@ function normalizeArabicName(name) {
         .replace(/[إأآا]/g, 'ا')
         .replace(/[ھه]/g, 'ه')
         .replace(/[يى]/g, 'ى')
-        .replace(/[ؤ]/g, 'و')
         .replace(/[ئ]/g, 'ى')
         .replace(/[^\u0600-\u06FF\s]/g, '')
         .replace(/\s+/g, ' ')
         .trim()
-        .toLowerCase();
 }
-
+//
 // PDF content parser function
 function parsePdfContent(text) {
     const cleanedText = text
