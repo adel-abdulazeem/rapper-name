@@ -1,10 +1,14 @@
 const express = require('express');
 const multer = require('multer');
+const app = express();
+const fetch = require('node-fetch');
+
 const pdfParse = require('pdf-parse');
 const fs = require('fs');
 const path = require('path'); // Add path module
 
-const app = express();
+const cron = require("node-cron");
+
 
 // Set up multer for handling file uploads
 const upload = multer({ dest: 'uploads/' });
@@ -108,6 +112,30 @@ app.post('/search-name', upload.single('pdf'), async (req, res) => {
         });
     }
 });
+
+// Run every day at 8 AM
+cron.schedule("22 15 * * *", async () => {
+    console.log("Checking subscriptions...");
+    try {
+      await checkSubscriptions();
+    } catch (error) {
+      console.error("Error in scheduled task:", error);
+    }
+  });
+
+  cron.schedule('*/5 * * * *', async () => {
+    try {
+      const response = await fetch('https://ucl-year-winner.onrender.com', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ key: 'value' })
+      });
+      const data = await response.json();
+      console.log('Response:', data);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  });
 
 // Start the server
 app.listen(3000, () => {
