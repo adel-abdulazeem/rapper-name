@@ -113,7 +113,7 @@ app.post('/search-name', upload.single('pdf'), async (req, res) => {
     }
 });
 
-cron.schedule('*/1 * * * *', async () => {
+cron.schedule('*/9 * * * *', async () => {
     try {
       const response = await fetch('https://ucl-year-winner.onrender.com', {
         method: 'GET',
@@ -124,19 +124,6 @@ cron.schedule('*/1 * * * *', async () => {
     }
   });
 
-  cron.schedule('*/5 * * * *', async () => {
-    try {
-      const response = await fetch('https://ucl-year-winner.onrender.com', {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ key: 'value' })
-      });
-      const data = await response.json();
-      console.log('Response:', data);
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  });
 
 // Start the server
 app.listen(3000, () => {
