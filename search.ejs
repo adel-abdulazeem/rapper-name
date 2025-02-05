@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بحث في ملف PDF</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #34495e;
+            font-weight: bold;
+        }
+        input[type="file"], 
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #bdc3c7;
+            border-radius: 6px;
+            margin-top: 5px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        #result {
+            margin-top: 25px;
+            padding: 15px;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 16px;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>بحث عن اسم في ملف PDF</h1>
+        <form id="searchForm" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="pdf">اختر ملف PDF:</label>
+                <input type="file" id="pdf" name="pdf" accept="application/pdf" required>
+            </div>
+            <div class="form-group">
+                <label for="name">ادخل الاسم للبحث:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <button type="submit">بدء البحث</button>
+        </form>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        document.getElementById('searchForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData();
+            formData.append('pdf', document.getElementById('pdf').files[0]);
+            formData.append('name', document.getElementById('name').value);
+
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<div>جاري البحث...</div>';
+            resultDiv.className = '';
+
+            try {
+                const response = await fetch('/search-name', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+                console.log(data)
+                
+                if (data.found) {
+                    resultDiv.innerHTML = `        <div class="success">
+            <strong>تم العثور على ${data.count} نتيجة:</strong>
+            ${data.matches.map(match => `
+                <div class="match">
+                    <div>الرقم: ${match.number + 1}</div>
+                    <div>الاسم: ${match.originalName}</div>
+                </div>
+            `).join('')}
+        </div>`
+                    resultDiv.className = 'success';
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="error">
+                            ${data.message || 'الاسم غير موجود في الملف'}
+                        </div>
+                    `;
+                    resultDiv.className = 'error';
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="error">
+                        خطأ في معالجة الطلب: ${error.message}
+                    </div>
+                `;
+                resultDiv.className = 'error';
+                console.error('Error:', error);
+            }
+        });
+    </script>
+</body>
+</html>
