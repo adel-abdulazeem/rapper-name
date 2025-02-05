@@ -34,7 +34,7 @@ function normalizeArabicName(name) {
 app.get('/', (req, res) => {
     res.render('search'); 
 });
-app.post('/search-name/:name', async (req, res) => {
+app.get('/search-name/:name', async (req, res) => {
     try {
         const searchName = normalizeArabicName(req.params.name)
         const matches = jsonData.filter(entry => 
