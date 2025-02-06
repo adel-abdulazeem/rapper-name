@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بحث في ملف PDF</title>
+    <title>Search Your ID Demo</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -90,14 +90,19 @@
 </head>
 <body>
     <div class="container">
+        <p>This is a demo version. Sample data available for testing purposes: 'John Doe'</p>
         <form id="searchForm">
             <div class="form-group">
-                <label for="name">أدخل الاسم الأول فقط أو الاسم الأول والثاني للبحث:</label>
-                <input type="text" id="name" name="name"  placeholder="مثال: محمد أو محمد علي" required>
+                <label for="name">Enter first name only or both first and second names to search:</label>
+                <input type="text" id="name" name="name" placeholder="Example: John or John Doe" required>
             </div>
-            <button type="submit">بدء البحث</button>
+            <button type="submit">Start Search</button>
         </form>
         <div id="result"></div>
+        <footer>
+            <p>&copy; 2025 All rights reserved | Designed by 
+            <a href="https://adelabdulazeem.netlify.app" target="_blank">Adel Abdulazeem</a></p>
+        </footer>
     </div>
 
     <script>
@@ -105,27 +110,28 @@
             e.preventDefault();
             const name = document.getElementById('name').value;
             const resultDiv = document.getElementById('result');
-            resultDiv.innerHTML = '<div>جاري البحث...</div>';
+            resultDiv.innerHTML = '<div>Searching...</div>';
             resultDiv.className = '';
 
             try {
                 const response = await fetch(`https://ucl-year-winner.onrender.com/search-name/${name}`);
                 const data = await response.json();                
                 if (data.found) {
-                    resultDiv.innerHTML = `        <div class="success">
-            <strong>تم العثور على ${data.count} نتيجة:</strong>
-            ${data.matches.map(match => `
-                <div class="match">
-                    <div>الرقم: ${Number(match.number) + Number(1)}</div>
-                    <div>الاسم: ${match.originalName}</div>
-                </div>
-            `).join('')}
-        </div>`
+                    resultDiv.innerHTML = `        
+                        <div class="success">
+                            <strong>Found ${data.count} results:</strong>
+                            ${data.matches.map(match => `
+                                <div class="match">
+                                    <div>Number: ${Number(match.number) + Number(1)}</div>
+                                    <div>Name: ${match.originalName}</div>
+                                </div>
+                            `).join('')}
+                        </div>`;
                     resultDiv.className = 'success';
                 } else {
                     resultDiv.innerHTML = `
                         <div class="error">
-                            ${data.message || 'المشكلة في الموقع أو الاسم غير موجود في الملف'}
+                            ${data.message || 'There was a problem with the site or the name is not found in the file'}
                         </div>
                     `;
                     resultDiv.className = 'error';
@@ -133,7 +139,7 @@
             } catch (error) {
                 resultDiv.innerHTML = `
                     <div class="error">
-                        خطأ في معالجة الطلب: ${error.message}
+                        Error processing request: ${error.message}
                     </div>
                 `;
                 resultDiv.className = 'error';

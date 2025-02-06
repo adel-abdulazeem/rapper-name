@@ -28,7 +28,8 @@ function normalizeArabicName(name) {
         .replace(/ـ+/g, '') // Remove Tatweel
         .replace(/[^\u0600-\u06FF\s]/g, '') // Remove non-Arabic characters
         .replace(/\s+/g, ' ') // Normalize spaces
-        .trim(); // Trim leading/trailing spaces
+        .toLowerCase()
+        .trim() // Trim leading/trailing spaces
 }
 
 app.get('/', (req, res) => {
