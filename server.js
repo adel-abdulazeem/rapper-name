@@ -67,16 +67,16 @@ app.get('/search-name/:name', async (req, res) => {
     }
 });
 
-cron.schedule('*/9 * * * *', async () => {
-    try {
-      const response = await fetch('https://ucl-year-winner.onrender.com', {
-        method: 'GET',
-      });
-      console.log('Response:');
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  });
+// cron.schedule('*/9 * * * *', async () => {
+//     try {
+//       const response = await fetch('https://ucl-year-winner.onrender.com', {
+//         method: 'GET',
+//       });
+//       console.log('Response:');
+//     } catch (error) {
+//       console.error('Error:', error);
+//     }
+//   });
 
 
 // Start the server
